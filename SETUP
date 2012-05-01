@@ -2,7 +2,7 @@
 
 echo "Trying to build SDL..."
 cd deps
-tar xvf SDL-1.2.15.tar.gz libsdl
+tar xvf SDL-1.2.15.tar.gz -C libsdl
 cd libsdl
 ./configure
 make
@@ -13,7 +13,7 @@ cd ../../
 
 echo "Trying to build OpenCV..."
 cd deps
-tar xvf OpenCV-2.3.1a.tar.bz2 libopencv
+tar xvf OpenCV-2.3.1a.tar.bz2 -C libopencv
 cd libopencv
 mkdir build
 cd build
