@@ -1,0 +1,20 @@
+1) Setup SDL
+
+cd deps/libsdl
+./configure
+make
+make install
+
+2) ...
+o
+
+?) Build self
+
+mkdir build
+cd build
+cmake -G "MSYS Makefiles" ..
+make
+
+?) Run tests
+
+make test

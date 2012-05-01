@@ -35,40 +35,30 @@ set(INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/include")
 # Deps: math
 set(EXTRA_LIBRARIES ${EXTRA_LIBRARIES} m)
 
-# Deps: libusb (for libfreenect)
-find_package(libusb-1.0 REQUIRED)
-include_directories(${LIBUSB_1_INCLUDE_DIRS})
-
-# Deps: libfreenect
-if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-  set(FREENECT_LIBRARY "${PROJECT_SOURCE_DIR}/deps/libfreenect/build/lib/libfreenect.so")
-endif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+# Cocoa for sdl on osx
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-  set(FREENECT_LIBRARY "${PROJECT_SOURCE_DIR}/deps/libfreenect/build/lib/libfreenect.dylib")
+  find_library(COCOA_LIBRARY Cocoa)
+  set (EXTRA_LIBRARIES ${EXTRA_LIBRARIES} ${COCOA_LIBRARY})
 endif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-set(FREENECT_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/deps/libfreenect/include")
-find_package(freenect REQUIRED)
-set(INCLUDE_DIRS ${INCLUDE_DIRS} ${FREENECT_INCLUDE_DIRS})
-set(EXTRA_LIBRARIES ${EXTRA_LIBRARIES} ${FREENECT_LIBRARIES})
 
-# Deps: libn
-set(n_DIR "${PROJECT_SOURCE_DIR}/deps/libn/build/")
-find_package(n REQUIRED)
-set(INCLUDE_DIRS ${INCLUDE_DIRS} ${DMI_INCLUDE_DIRS})
-set(EXTRA_LIBRARIES ${EXTRA_LIBRARIES} ${DMI_SHARED_LIBRARIES})
+# mingw for windows <3
+if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+  set (EXTRA_LIBRARIES ${EXTRA_LIBRARIES} mingw32)
+endif (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 
-# Deps: opengl
-IF (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-  SET(EXTRA_LIBRARIES ${EXTRA_LIBRARIES} GL GLU X11)
-ENDIF (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-IF (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-  FIND_LIBRARY(OpenGL_LIBRARY OpenGL)
-  SET (EXTRA_LIBRARIES ${EXTRA_LIBRARIES} ${OpenGL_LIBRARY})
-ENDIF (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+# Set library extension
+set(PROJECT_LIB_EXT "dll.a")
+if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+  set(PROJECT_LIB_EXT "dylib")
+endif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
-# Deps: glut
-FIND_LIBRARY(GLUT required)
-SET (EXTRA_LIBRARIES ${EXTRA_LIBRARIES} ${GLUT_LIBRARY})
+# Deps: sdl
+set(LIBSDL_LIBRARY "${LIBSDL_LIBRARY};${PROJECT_SOURCE_DIR}/deps/libsdl/build/.libs/libSDLmain.a")
+set(LIBSDL_LIBRARY "${LIBSDL_LIBRARY};${PROJECT_SOURCE_DIR}/deps/libsdl/build/.libs/libSDL.${PROJECT_LIB_EXT}")
+set(LIBSDL_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/deps/libsdl/include;${PROJECT_SOURCE_DIR}/deps/libsdl/build/x86/include/")
+find_package(LIBSDL REQUIRED)
+set (EXTRA_LIBRARIES ${EXTRA_LIBRARIES} ${LIBSDL_LIBRARY})
+set(INCLUDE_DIRS ${INCLUDE_DIRS} ${LIBSDL_INCLUDE_DIRS})
 
 # Build library
 add_library (dmi SHARED ${SOURCES})
@@ -82,7 +72,7 @@ target_link_libraries(demo ${EXTRA_LIBRARIES})
 # Export
 get_property(dmi_location TARGET dmi PROPERTY LOCATION)
 set(LIBRARIES "${dmi_location};${EXTRA_LIBRARIES}")
-configure_file(dmiConfig.cmake.in "${CMAKE_BINDMIY_DIR}/dmiConfig.cmake")
+configure_file(dmiConfig.cmake.in "${CMAKE_BINARY_DIR}/dmiConfig.cmake")
 
 # Test config
 option(BUILD_UNIT_TESTS "Build unit tests" ON)
@@ -91,13 +81,8 @@ option(BUILD_INTEGRATION_TESTS "Build integration tests" OFF)
 # Collect test files
 if(BUILD_UNIT_TESTS)
   set(TESTING_ENABLED 1)
-  file(GLOB_RECURSE TEST_PROJECTS tests/unit/CMakeLists*)
+  file(GLOB_RECURSE TEST_PROJECTS tests/CMakeLists*)
 endif(BUILD_UNIT_TESTS)
-if(BUILD_INTEGRATION_TESTS)
-  set(TESTING_ENABLED 1)
-  file(GLOB_RECURSE TEST_IPROJECTS tests/integration/CMakeLists*)
-  set(TEST_PROJECTS "${TEST_PROJECTS};${TEST_IPROJECTS}")
-endif(BUILD_INTEGRATION_TESTS)
 
 # Build tests
 if(TESTING_ENABLED)
