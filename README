@@ -1,20 +1,70 @@
-1) Setup SDL
+1) Setup MSYS
 
-cd deps/libsdl
-./configure
-make
-make install
+  Install the following:
 
-2) ...
-o
+  mingw from:
+  http://www.mingw.org/
 
-?) Build self
+  cmake from:
+  http://www.cmake.org/
 
-mkdir build
-cd build
-cmake -G "MSYS Makefiles" ..
-make
+  For mingw, get the mingw installer in the downloads section under:
+  'Installer' / 'mingw-get-inst'. 
 
-?) Run tests
+  Install c and c++
 
-make test
+  Now start up the 'MinGW Shell' and install a decent terminal:
+  mingw-get install mintty
+
+  If that worked, you should be able to type 'mintty' from the shell and get 
+  a new window to open that can do useful things like go fullscreen. 
+
+  In the new window type 'gcc --version' and you should see something like:
+
+  $ gcc --version
+  gcc.exe (GCC) 4.6.1
+  Copyright (C) 2011 Free Software Foundation, Inc.
+  This is free software; see the source for copying conditions.  There is NO
+  warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  If that worked, you're good to go!
+
+
+2) Run SETUP
+
+  Either:
+
+    chmod 700 SETUP
+    ./SETUP
+
+  Or edit SETUP and run the commands in it manually.
+
+  cd deps
+  tar xvf SDL-1.2.15.tar.gz
+  mv SDL-1.2.15 libsdl
+  cd libsdl
+  ./configure
+  make
+  make install
+
+3) Install OpenCV
+
+  cd deps
+  tar xvf OpenCV-2.3.1a.tar.bz2  
+  mv OpenCV-2.3.1 libopencv
+  cd libopencv
+  cmake -G "MSYS Makefiles" -DWITH_CUDA=NO ..
+  make
+
+4) Build self
+
+  mkdir build
+  cd build
+  cmake -G "MSYS Makefiles" ..
+  make
+
+5) Run tests
+
+  cd build
+  make test
+
+  Should output:

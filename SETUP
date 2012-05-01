@@ -1,0 +1,38 @@
+# Setup SDL
+
+echo "Trying to build SDL..."
+cd deps
+tar xvf SDL-1.2.15.tar.gz
+mv SDL-1.2.15 libsdl
+cd libsdl
+./configure
+make
+make install
+cd ../../
+
+# Setup OpenCV
+
+echo "Trying to build OpenCV..."
+cd deps
+tar xvf OpenCV-2.3.1a.tar.bz2  
+mv OpenCV-2.3.1 libopencv
+cd libopencv
+mkdir build
+cd build
+cmake -G "MSYS Makefiles" -DWITH_CUDA=NO ..
+make
+make install
+cd ../../
+
+# Build self
+
+echo "Trying to build Self..."
+mkdir build
+cd build
+cmake -G "MSYS Makefiles" ..
+make
+
+# Run tests to check everything worked
+
+echo "Running tests. You should see no failures."
+make test
