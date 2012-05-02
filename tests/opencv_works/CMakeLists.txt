@@ -16,7 +16,7 @@
 include(${PROJECT_BINARY_DIR}/dmiConfig.cmake)
 
 # Unique name for this test
-set(TEST_NAME "test-sdl-works")
+set(TEST_NAME "test-opencv-works")
 set(TEST_DEPS ${DMI_LIBRARIES})
 set(TEST_INCS ${DMI_INCLUDE_DIRS})
 

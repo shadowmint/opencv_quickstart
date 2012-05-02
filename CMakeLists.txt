@@ -57,8 +57,25 @@ set(LIBSDL_LIBRARY "${LIBSDL_LIBRARY};${PROJECT_SOURCE_DIR}/deps/libsdl/build/.l
 set(LIBSDL_LIBRARY "${LIBSDL_LIBRARY};${PROJECT_SOURCE_DIR}/deps/libsdl/build/.libs/libSDL.${PROJECT_LIB_EXT}")
 set(LIBSDL_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/deps/libsdl/include;${PROJECT_SOURCE_DIR}/deps/libsdl/build/x86/include/")
 find_package(LIBSDL REQUIRED)
+message(${LIBSDL_LIBRARY})
 set (EXTRA_LIBRARIES ${EXTRA_LIBRARIES} ${LIBSDL_LIBRARY})
 set(INCLUDE_DIRS ${INCLUDE_DIRS} ${LIBSDL_INCLUDE_DIRS})
+
+# Deps: opencv
+find_package(OPENCV REQUIRED)
+set(INCLUDE_DIRS ${INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS})
+set(OpenCV_OPT_LIB 0)
+foreach(OpenCV_LIB ${OpenCV_LIBS})
+  if (${OpenCV_OPT_LIB})
+    set(OpenCV_LIB_FIXED "${OpenCV_LIB_DIR}/lib${OpenCV_LIB}.${PROJECT_LIB_EXT}")
+    set(EXTRA_LIBRARIES ${EXTRA_LIBRARIES} ${OpenCV_LIB_FIXED})
+    set(OpenCV_OPT_LIB 0)
+  else (${OpenCV_OPT_LIB})
+    if (${OpenCV_LIB} MATCHES "optimized")
+      set(OpenCV_OPT_LIB 1)
+    endif (${OpenCV_LIB} MATCHES "optimized")
+  endif (${OpenCV_OPT_LIB})
+endforeach(OpenCV_LIB)
 
 # Build library
 add_library (dmi SHARED ${SOURCES})
