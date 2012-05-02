@@ -13,7 +13,7 @@ cd ../../
 
 echo "Trying to build OpenCV..."
 cd deps
-tar xvf OpenCV-2.3.1a.tar.bz2 -C libopencv
+tar xvf OpenCV-2.3.1a.tar.gz -C libopencv
 cd libopencv
 mkdir build
 cd build
