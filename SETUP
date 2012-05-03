@@ -19,7 +19,7 @@ mv OpenCV-2.3.1 libopencv
 cd libopencv
 mkdir build
 cd build
-cmake -G "MSYS Makefiles" -DWITH_CUDA=NO ..
+cmake -G "MSYS Makefiles" -DWITH_CUDA=NO -DENABLE_SSE=NO -DENABLE_SSE2=NO ..
 make
 make install
 cd ../../

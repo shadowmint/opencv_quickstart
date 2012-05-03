@@ -37,34 +37,3 @@
     ./SETUP
 
   Or edit SETUP and run the commands in it manually.
-
-  cd deps
-  tar xvf SDL-1.2.15.tar.gz
-  mv SDL-1.2.15 libsdl
-  cd libsdl
-  ./configure
-  make
-  make install
-
-3) Install OpenCV
-
-  cd deps
-  tar xvf OpenCV-2.3.1a.tar.bz2  
-  mv OpenCV-2.3.1 libopencv
-  cd libopencv
-  cmake -G "MSYS Makefiles" -DWITH_CUDA=NO ..
-  make
-
-4) Build self
-
-  mkdir build
-  cd build
-  cmake -G "MSYS Makefiles" ..
-  make
-
-5) Run tests
-
-  cd build
-  make test
-
-  Should output:
