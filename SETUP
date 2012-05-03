@@ -2,7 +2,8 @@
 
 echo "Trying to build SDL..."
 cd deps
-tar xvf SDL-1.2.15.tar.gz -C libsdl
+tar xvf SDL-1.2.15.tar.gz
+mv SDL-1.2.15 libsdl
 cd libsdl
 ./configure
 make
@@ -13,7 +14,8 @@ cd ../../
 
 echo "Trying to build OpenCV..."
 cd deps
-tar xvf OpenCV-2.3.1a.tar.gz -C libopencv
+tar xvf OpenCV-2.3.1a.tar.gz
+mv OpenCV-2.3.1 libopencv
 cd libopencv
 mkdir build
 cd build
@@ -32,5 +34,6 @@ make
 
 # Run tests to check everything worked
 
+export PATH=$PATH:`pwd`/../deps/libopencv/build/bin
 echo "Running tests. You should see no failures."
 make test

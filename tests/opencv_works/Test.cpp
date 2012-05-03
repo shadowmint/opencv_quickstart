@@ -10,7 +10,5 @@ int main()
 
   imshow("window", img);
 
-  waitKey();
-
   return 0;
 }
